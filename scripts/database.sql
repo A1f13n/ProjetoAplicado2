@@ -244,3 +244,4 @@ INSERT INTO pessoa(nome, cpf, senha, data_nasc, telefone, email) VALUES ("Fun1",
 INSERT INTO funcionario (id_pessoa, cargo, salario, data_admissao) VALUES (1, "Faxineiro", 2764.64, "2023-05-25");
 INSERT INTO pessoa(nome, cpf, senha, data_nasc, telefone, email) VALUES ("João Honorato", "45698712354", "1978-01-01", "senhaSupr@sum0", 4579865982, "contact@gmail.com");
 INSERT INTO hospede(id_pessoa, data_criacao_conta, ultimo_login) VALUES(2, NOW(), NOW());
+SELECT * FROM pessoa right join hospede;

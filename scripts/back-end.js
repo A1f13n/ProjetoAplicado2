@@ -1,16 +1,22 @@
-import mysql from 'mysql2'
-import dotenv from 'dotenv'
-import Joi from 'joi'
-dotenv.config()
+const mysql = require('mysql2');
+const dotenv = require('dotenv');
 
-const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
-}).promise()
+dotenv.config();
 
-export async function validarLogin(login, senha) {
+
+module.exports = async function conexao() {
+    const pool = mysql.createPool({
+        host: process.env.MYSQL_HOST,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE
+    }).promise();
+
+    return pool
+};
+
+module.exports = async function validarLogin(login, senha) {
+    alert("3");
     const connection = await pool.getConnection();
     
     try {
@@ -42,11 +48,11 @@ export async function validarLogin(login, senha) {
     } finally {
         connection.release();
     }
-}
+};
 
 
 
-export async function insertHospedePessoa(pessoaData, hospedeData) {
+module.exports = async function insertHospedePessoa(nome, cpf, senha, data_nasc, telefone, email) {
     const connection = await pool.getConnection();
 
 
@@ -55,7 +61,7 @@ export async function insertHospedePessoa(pessoaData, hospedeData) {
 
         const [pessoaResult] = await connection.query(
             'INSERT INTO pessoa (nome, cpf, senha, data_nasc, telefone, email) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [pessoaData.nome, pessoaData.cpf, pessoaData.senha, pessoaData.data_nasc, pessoaData.telefone, pessoaData.email]
+            [nome, cpf, senha, data_nasc, telefone, email]
         );
 
         const pessoaId = pessoaResult.insertId;
@@ -74,10 +80,10 @@ export async function insertHospedePessoa(pessoaData, hospedeData) {
     } finally {
         connection.release();
     }
-}
+};
  
 
-export async function select_hospede(id) {
+module.exports = async function select_hospede(id) {
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
@@ -93,7 +99,7 @@ export async function select_hospede(id) {
         console.error("Erro ao buscar dados", error);
         throw error;
     }
-}
+};
 
 
 // export async function insertFuncionarioPessoa(pessoaData, funcionarioData) {
@@ -125,7 +131,7 @@ export async function select_hospede(id) {
 // }
 
 
-export async function insertAcomodacao(acomodacaoData) {
+module.exports = async function insertAcomodacao(acomodacaoData) {
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
@@ -144,9 +150,9 @@ export async function insertAcomodacao(acomodacaoData) {
     } finally {
         connection.release();
     }
-}
+};
 
-export async function insertReserva(reservaData) {
+module.exports = async function insertReserva(reservaData) {
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
@@ -165,4 +171,4 @@ export async function insertReserva(reservaData) {
     } finally {
         connection.release();
     }
-}
+};
